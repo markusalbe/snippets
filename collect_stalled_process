@@ -29,7 +29,6 @@ log_file="${PTDEST}/stalled_process.log";
 function do_data_collection() {
   d=$(date +%F_%T |tr ":" "-");
   echo "[$d] doing data collection"  >> "${log_file}";
-  return 0;
   /usr/bin/pt-pmp --save-samples="${PTDEST}/$d-pmp.samples" > "${PTDEST}/$d-pmp";
   timeout 10 strace -f -s2048 -ttt -TT -o "${PTDEST}/$d-strace" -p $(pgrep -x mysqld);
   perf record -o"${PTDEST}/$d-perf.data" -g -F99 -p$(pgrep -x mysqld) -- sleep 60;
